@@ -1,0 +1,7 @@
+create table users(
+id int identity primary key not null,
+fname varchar(200) null,
+lname varchar(200) null,
+email varchar(300) null,
+status varchar(5) default 'Y'
+)
