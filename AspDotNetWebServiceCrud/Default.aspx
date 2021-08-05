@@ -15,11 +15,11 @@
               <input type="text" class="form-control  rounded-0 mb-3" id="serchtext">
           </div>
         </div>
-        <table class="table">
+        <table class="table" id="searchResult">
             <caption>
                 <button class="btn btn-success rounded-0" data-toggle="modal" data-target="#AddModal">Add User</button>
             </caption>
-  <thead class="thead-dark">
+  <thead class="thead-dark" >
     <tr>
       <th>Sr</th>
       <th>First</th>
@@ -86,6 +86,7 @@
                 let lName = $("#lName").val();
                 let email = $("#email").val();
                 console.log('fName', fName)
+
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
@@ -93,15 +94,34 @@
                     dataType: "json",
                     data: "{'fName':'" + fName + "','lName': '" + lName + "', 'email': '" + email + "'}",
                     success: function (resp) {
-                        console.log('resp', resp)
+                        console.log('resp', resp.d)
+                       
+
                     },
 
                 });
             })
 
             //Search Web Service 
-            $("#serchtext").on('keydown', () => {
+            $("#serchtext").on('keyup', () => {
                 let serchtext = $("#serchtext").val()
+
+                let tableResult = ``;
+
+                tableResult = `<table class="table">
+                                    <caption>
+                                        <button class="btn btn-success rounded-0" data-toggle="modal" data-target="#AddModal">Add User</button>
+                                    </caption>
+                          <thead class="thead-dark" id="searchResult">
+                            <tr>
+                              <th>Sr</th>
+                              <th>First</th>
+                              <th>Last</th>
+                              <th>Email</th>
+                            </tr>
+                          </thead>
+                          <tbody>`;
+
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
@@ -110,6 +130,21 @@
                     data: "{'searchKey':'" + serchtext + "'}",
                     success: function (resp) {
                         console.log('resp', resp)
+
+                        let result = JSON.parse(resp.d);
+                        console.log('result===========>',result)
+                        result.forEach((item) => {
+                            tableResult += `
+                              <tr>
+                              <th>${item.id}</th>
+                              <td>${item.fname}</td>
+                              <td>${item.lname}</td>
+                              <td>${item.email}</td>
+                            </tr>`;
+                        })
+
+                        tableResult += `<tbody></table>`;
+                        $("#searchResult").html(tableResult)
                     },
 
                 });
