@@ -25,6 +25,7 @@
       <th>First</th>
       <th>Last</th>
       <th>Email</th>
+         <th>Action</th>
     </tr>
   </thead>
   <tbody>
@@ -35,6 +36,9 @@
       <td><%#Eval("fname")%></td>
       <td><%#Eval("lname")%></td>
       <td><%#Eval("email")%></td>
+      <td><a><i class="bi bi-pencil-square"></i></a>
+          <a><i class="bi bi-trash"></i></a>
+      </td>
     </tr>
    </ItemTemplate>
 </asp:Repeater>
