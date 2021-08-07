@@ -4,8 +4,8 @@
 
     <div class="jumbotron">
         <h1>ASP.NET WEB APP WITH WEB SERVICE</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-        <p><a href="http://www.asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+        <p class="lead">ASP.NET Web Service Using jQuery Ajax With Crud</p>
+        <p><a href="http://www.dynamitetechnology.in" class="btn btn-primary btn-lg">Contact us</a></p>
     </div>
 
     <div class="container">
@@ -74,8 +74,10 @@
   </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary  rounded-0" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary  rounded-0 AddUser">Save</button>
+       <a type="button" class="btn btn-danger  rounded-0 success-btn d-none" data-dismiss="modal">Success</a>
+                 <button type="button" class="btn btn-secondary  rounded-0" data-dismiss="modal">Close</button>
+                 <button type="button" class="btn btn-primary  rounded-0 AddUser">Save</button>
+          </div>
       </div>
     </div>
   </div>
@@ -90,7 +92,6 @@
                 let lName = $("#lName").val();
                 let email = $("#email").val();
                 console.log('fName', fName)
-
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
@@ -98,20 +99,22 @@
                     dataType: "json",
                     data: "{'fName':'" + fName + "','lName': '" + lName + "', 'email': '" + email + "'}",
                     success: function (resp) {
-                        console.log('resp', resp.d)
+                        $(".success-btn").removeClass('d-none')
+
+                        setTimeout(function () {
+                            $("#AddModal").modal('hide');
+                            location.reload()
+                        }, 1500);
                        
-
+                        console.log('resp', resp.d)
                     },
-
                 });
             })
 
             //Search Web Service 
             $("#serchtext").on('keyup', () => {
                 let serchtext = $("#serchtext").val()
-
                 let tableResult = ``;
-
                 tableResult = `<table class="table">
                                     <caption>
                                         <button class="btn btn-success rounded-0" data-toggle="modal" data-target="#AddModal">Add User</button>
@@ -125,7 +128,6 @@
                             </tr>
                           </thead>
                           <tbody>`;
-
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
@@ -134,7 +136,6 @@
                     data: "{'searchKey':'" + serchtext + "'}",
                     success: function (resp) {
                         console.log('resp', resp)
-
                         let result = JSON.parse(resp.d);
                         console.log('result===========>',result)
                         result.forEach((item) => {
@@ -146,11 +147,9 @@
                               <td>${item.email}</td>
                             </tr>`;
                         })
-
                         tableResult += `<tbody></table>`;
                         $("#searchResult").html(tableResult)
                     },
-
                 });
             })
         })
