@@ -36,7 +36,7 @@
       <td><%#Eval("fname")%></td>
       <td><%#Eval("lname")%></td>
       <td><%#Eval("email")%></td>
-      <td><a><i class="bi bi-pencil-square"></i></a>
+      <td><a class="editModal" data-edit = "<%#Eval("id")%>"><i class="bi bi-pencil-square"></i></a>
           <a><i class="bi bi-trash"></i></a>
       </td>
     </tr>
@@ -85,8 +85,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" ></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 	<script type="text/javascript">
         $(document).ready(function () {
+            $('#searchResult').DataTable();
             $(".AddUser").on('click', function () {
                 let fName = $("#fName").val();
                 let lName = $("#lName").val();
@@ -149,6 +151,22 @@
                         })
                         tableResult += `<tbody></table>`;
                         $("#searchResult").html(tableResult)
+                    },
+                });
+            })
+
+            //Get Edit Data
+            $("#searchResult").on('click', '.editModal', function () {
+                let editid = $(this).attr("data-edit")
+                console.log('editid---------->', editid)
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "WebServices.asmx/getEingleUser",
+                    dataType: "json",
+                    data: "{'editid':'" + editid + "'}",
+                    success: function (resp) {
+                        console.log('resp', resp.d)
                     },
                 });
             })

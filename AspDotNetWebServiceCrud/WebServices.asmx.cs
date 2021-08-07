@@ -83,5 +83,40 @@ namespace AspDotNetWebServiceCrud
            
             return JsonResult;
         }
+
+
+
+        [WebMethod]
+        public string getEingleUser(string editid)
+        {
+            string strcon = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
+            SqlConnection con = new SqlConnection(strcon);
+            string sql = " select id, fname, lname, email from users where id = '"+ editid + "'";
+            List<User> userList = new List<User>();
+            string JsonResult = "";
+            using (SqlCommand command = new SqlCommand(sql, con))
+            {
+                con.Open();
+
+                var reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        User user = new User();
+                        user.id = Convert.ToInt32(reader["id"]);
+                        user.fname = reader["fname"].ToString();
+                        user.lname = reader["lname"].ToString();
+                        user.email = reader["email"].ToString();
+                        userList.Add(user);
+                    }
+
+                }
+                JsonResult = JsonConvert.SerializeObject(userList);
+                con.Close();
+            }
+
+            return JsonResult;
+        }
     }
 }
