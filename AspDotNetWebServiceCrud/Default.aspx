@@ -37,7 +37,7 @@
       <td><%#Eval("lname")%></td>
       <td><%#Eval("email")%></td>
       <td><a class="editModal" data-edit = "<%#Eval("id")%>"><i class="bi bi-pencil-square"></i></a>
-          <a><i class="bi bi-trash"></i></a>
+          <a class="deletedata" data-id = "<%#Eval("id")%>"><i class="bi bi-trash"></i></a>
       </td>
     </tr>
    </ItemTemplate>
@@ -59,7 +59,6 @@
         </button>
       </div>
       <div class="modal-body">
-
   <div class="form-group">
     <label for="exampleInputEmail1">First Name</label>
     <input type="text" class="form-control rounded-0" id="fName">
@@ -81,7 +80,41 @@
       </div>
     </div>
   </div>
-</div>
+
+
+
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content  rounded-0">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+  <div class="form-group">
+    <label for="exampleInputEmail1">First Name</label>
+    <input type="text" class="form-control rounded-0" id="mfName">
+       <input type="text" class="form-control rounded-0" id="mid">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Last Name</label>
+    <input type="text" class="form-control  rounded-0" id="mlName">
+  </div>
+    <div class="form-group">
+    <label for="exampleInputPassword1">Email</label>
+    <input type="text" class="form-control  rounded-0" id="memail">
+  </div>
+      </div>
+      <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary  rounded-0" data-dismiss="modal">Close</button>
+                 <button type="button" class="btn btn-primary  rounded-0 updateInfo">Update</button>
+          </div>
+      </div>
+    </div>
+  </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" ></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
@@ -166,7 +199,60 @@
                     dataType: "json",
                     data: "{'editid':'" + editid + "'}",
                     success: function (resp) {
-                        console.log('resp', resp.d)
+                        //console.log('resp', resp.d)
+
+                        let response = JSON.parse(resp.d);
+                        console.log('response--->', response)
+
+                        response.forEach(function (itm) {
+                            console.log('itm--->', itm)
+                            $("#mfName").val(itm.fname)
+                            $("#mlName").val(itm.lname)
+                            $("#memail").val(itm.email)
+                            $("#mid").val(itm.id)
+                        })
+                        $("#updateModal").modal('show')
+                       
+                    },
+                });
+            })
+
+
+
+            //Get Update Data
+            $(".updateInfo").on('click', function () {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "WebServices.asmx/UpdateUser",
+                    dataType: "json",
+                    data: "{'id':'" + $("#mid").val()+"','fname':'" + $("#mfName").val() + "','lname':'" + $("#mlName").val() + "','email':'" + $("#memail").val()+"'}",
+                    success: function (resp) {
+                        //console.log('resp', resp.d)
+                        location.reload()
+                        let response = resp.d;
+                        console.log('response--->', response)
+                    },
+                });
+            })
+
+
+            //Delete
+            $("#searchResult").on('click', '.deletedata', function () {
+                let editid = $(this).attr("data-id")
+                console.log('editid---------->', editid)
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "WebServices.asmx/deleteuser",
+                    dataType: "json",
+                    data: "{'editid':'" + editid + "'}",
+                    success: function (resp) {
+                        //console.log('resp', resp.d)
+                        location.reload()
+                        let response = resp.d;
+                        console.log('response--->', response)
+
                     },
                 });
             })

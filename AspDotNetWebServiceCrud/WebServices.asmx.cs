@@ -118,5 +118,73 @@ namespace AspDotNetWebServiceCrud
 
             return JsonResult;
         }
+
+
+        [WebMethod]
+        public string UpdateUser(string fname, string lname, string email, string id)
+        {
+            //Get connection string from web.config file  
+            string strcon = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
+            //create new sqlconnection and connection to database by using connection string from web.config file  
+            SqlConnection con = new SqlConnection(strcon);
+            int status = 0;
+            try
+            {
+                string sql = "update  users set fname = '" + fname + "', lname = '" + lname + "', email = '" + email + "' where id = '"+id+"'";
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                status = cmd.ExecuteNonQuery();
+                if (status > 0)
+                {
+                    return "Success";
+                }
+                else
+                {
+                    return "Fail";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return ex.Message;
+            }
+
+            //return null;
+        }
+
+
+        [WebMethod]
+        public string deleteuser(string editid)
+        {
+            //Get connection string from web.config file  
+            string strcon = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
+            //create new sqlconnection and connection to database by using connection string from web.config file  
+            SqlConnection con = new SqlConnection(strcon);
+            int status = 0;
+            try
+            {
+                string sql = "delete from users  where id = '" + editid + "'";
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                status = cmd.ExecuteNonQuery();
+                if (status > 0)
+                {
+                    return "Success";
+                }
+                else
+                {
+                    return "Fail";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return ex.Message;
+            }
+
+            //return null;
+        }
     }
 }
