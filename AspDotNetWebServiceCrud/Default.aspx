@@ -96,7 +96,7 @@
   <div class="form-group">
     <label for="exampleInputEmail1">First Name</label>
     <input type="text" class="form-control rounded-0" id="mfName">
-       <input type="text" class="form-control rounded-0" id="mid">
+       <input type="hidden" class="form-control rounded-0" id="mid">
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Last Name</label>
